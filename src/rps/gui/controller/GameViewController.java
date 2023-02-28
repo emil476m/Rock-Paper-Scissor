@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.Stage;
 import rps.bll.game.GameManager;
 import rps.bll.game.Move;
 import rps.bll.game.Result;
@@ -32,6 +33,8 @@ import static rps.bll.game.Move.Rock;
  */
 public class GameViewController implements Initializable {
 
+    @FXML
+    private Button btnClose;
     @FXML
     private ImageView imgPlayer;
     @FXML
@@ -64,7 +67,6 @@ public class GameViewController implements Initializable {
     private IPlayer bot;
     private GameManager ge;
 
-    private String playerMove;
 
     /**
      * Initializes the controller class.
@@ -77,18 +79,12 @@ public class GameViewController implements Initializable {
         human = new Player(playerName, PlayerType.Human);
         bot = new Player("SkyNet", PlayerType.AI);
 
-
-
         ge = new GameManager(human, bot);
 
         setNames(bot.getPlayerName(), human.getPlayerName().toString());
     }
-    public GameViewController(){
 
-
-    }
-
-    public void setNames(String botName, String humanName){
+    private void setNames(String botName, String humanName){
         lblPlayer.setText(humanName);
         lblBot.setText(botName);
     }
@@ -96,23 +92,20 @@ public class GameViewController implements Initializable {
     @FXML
     private void handleRock(ActionEvent actionEvent) {
         doMove("Rock");
-        CallRock();
     }
 
     @FXML
     private void handlePaper(ActionEvent actionEvent) {
         doMove("Paper");
-        CallPaper();
     }
 
     @FXML
     private void handleScissor(ActionEvent actionEvent) {
         doMove("Scissor");
-        CallScissor();
     }
 
     private String getNameFromUser(){
-        String defaultName = "Dave";
+        String defaultName = "Dwayne";
 
         TextInputDialog dialog = new TextInputDialog("" + defaultName);
         dialog.setTitle("Change Name");
@@ -128,24 +121,33 @@ public class GameViewController implements Initializable {
         return null;
     }
 
-    public void doMove(String playerMove) {
+    private void doMove(String playerMove) {
+        changeImg("Human", playerMove);
         ge.playRound(Move.valueOf(playerMove));
+
+
+
 
         ge.getGameState().getHistoricResults().forEach((result) -> {
             System.out.println(getResultAsString(result));
+            changeImg("Bot", getBotMove(result));
         });
 
+
     }
 
-    private void setPlayerMove(String playerMove){
-        this.playerMove = playerMove;
+    public String getBotMove(Result result){
+        if (result.getLoserPlayer().getPlayerName().equals(bot.getPlayerName())) {
+            return result.getLoserMove().name();
+        }
+        else if (result.getWinnerPlayer().getPlayerName().equals(bot.getPlayerName())) {
+            return result.getWinnerMove().name();
+        }
+
+        return null;
     }
 
-    private String getPlayerMove() {
-        return playerMove;
-    }
-
-    public String getResultAsString(Result result) {
+    private String getResultAsString(Result result) {
         String statusText = result.getType() == ResultType.Win ? "wins over " : "ties ";
 
         return "Round #" + result.getRoundNumber() + ":" +
@@ -154,26 +156,65 @@ public class GameViewController implements Initializable {
                 statusText + result.getLoserPlayer().getPlayerName() +
                 " (" + result.getLoserMove() + ")!";
     }
-    public void HandleExit(ActionEvent event) {
+    public void handleExit(ActionEvent event) {
+        Stage stage = (Stage) btnClose.getScene().getWindow();
+        stage.close();
     }
 
     public void HandleHistory(ActionEvent event) {
+
     }
 
-    public void CallRock(){
+    private void changeImg(String playerType, String move){
+
+        if (playerType.equals("Human")){
+            if (move.equals("Rock")){
+                callRock(playerType);
+            }
+            else if (move.equals("Paper")){
+                callPaper(playerType);
+            }
+            else if (move.equals("Scissor")){
+                callScissor(playerType);
+            }
+        }
+        else if (playerType.equals("Bot")){
+            if (move.equals("Rock")){
+                callRock(playerType);
+            }
+            else if (move.equals("Paper")){
+                callPaper(playerType);
+            }
+            else if (move.equals("Scissor")){
+                callScissor(playerType);
+            }
+        }
+
+    }
+
+    private void callRock(String playerType){
         File file = new File("data/the_Rock-removebg-preview.png");
         Image image = new Image(file.toURI().toString());
-        imgPlayer.setImage(image);
+        if (playerType.equals("Human"))
+            imgPlayer.setImage(image);
+        if (playerType.equals("Bot"))
+            imgBot.setImage(image);
     }
-    public void CallPaper(){
+    private void callPaper(String playerType){
         File file = new File("data/paper-removebg-preview.png");
         Image image = new Image(file.toURI().toString());
-        imgPlayer.setImage(image);
+        if (playerType.equals("Human"))
+            imgPlayer.setImage(image);
+        if (playerType.equals("Bot"))
+            imgBot.setImage(image);
     }
-    public void CallScissor(){
+    private void callScissor(String playerType){
         File file = new File("data/gZiXk0l-removebg-preview.png");
         Image image = new Image(file.toURI().toString());
-        imgPlayer.setImage(image);
+        if (playerType.equals("Human"))
+            imgPlayer.setImage(image);
+        if (playerType.equals("Bot"))
+            imgBot.setImage(image);
     }
 
 
