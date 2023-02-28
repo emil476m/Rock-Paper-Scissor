@@ -80,19 +80,23 @@ public class GameViewController implements Initializable {
 
     @FXML
     private void handleRock(ActionEvent actionEvent) {
-
+        doMove("Rock");
     }
 
     @FXML
     private void handlePaper(ActionEvent actionEvent) {
+        doMove("Paper");
     }
 
     @FXML
     private void handleScissor(ActionEvent actionEvent) {
+        doMove("Scissor");
     }
 
     private String getNameFromUser(){
-        TextInputDialog dialog = new TextInputDialog("");
+        String defaultName = "Dave";
+
+        TextInputDialog dialog = new TextInputDialog("" + defaultName);
         dialog.setTitle("Change Name");
         dialog.setHeaderText("What is your name");
         dialog.setContentText("Please write you name");
@@ -106,9 +110,12 @@ public class GameViewController implements Initializable {
         return null;
     }
 
-    public void startGame() {
+    public void doMove(String playerMove) {
+        ge.playRound(Move.valueOf(playerMove));
 
-
+        ge.getGameState().getHistoricResults().forEach((result) -> {
+            System.out.println(getResultAsString(result));
+        });
 
     }
 
@@ -120,12 +127,6 @@ public class GameViewController implements Initializable {
         return playerMove;
     }
 
-    /**
-     * Provides a custom formatted string representation of a Result
-     *
-     * @param result
-     * @return
-     */
     public String getResultAsString(Result result) {
         String statusText = result.getType() == ResultType.Win ? "wins over " : "ties ";
 
@@ -135,5 +136,6 @@ public class GameViewController implements Initializable {
                 statusText + result.getLoserPlayer().getPlayerName() +
                 " (" + result.getLoserMove() + ")!";
     }
+
 
 }
