@@ -5,9 +5,9 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-
 import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import rps.bll.game.GameManager;
 import rps.bll.game.Move;
@@ -17,11 +17,14 @@ import rps.bll.player.IPlayer;
 import rps.bll.player.Player;
 import rps.bll.player.PlayerType;
 
+import java.io.File;
 import java.net.URL;
 import java.util.Optional;
 import java.util.Random;
 import java.util.ResourceBundle;
 import java.util.Scanner;
+
+import static rps.bll.game.Move.Rock;
 
 /**
  *
@@ -37,6 +40,18 @@ public class GameViewController implements Initializable {
     private ImageView imgBot;
     @FXML
     private Label lblBot;
+    @FXML
+    private Label aICounter;
+    @FXML
+    private Label tieCounter;
+    @FXML
+    private Label playerCounter;
+    @FXML
+    private ImageView imgRock;
+    @FXML
+    private ImageView imgPaper;
+    @FXML
+    private ImageView imgScissor;
     @FXML
     private Button btnScissor;
     @FXML
@@ -81,16 +96,19 @@ public class GameViewController implements Initializable {
     @FXML
     private void handleRock(ActionEvent actionEvent) {
         doMove("Rock");
+        CallRock();
     }
 
     @FXML
     private void handlePaper(ActionEvent actionEvent) {
         doMove("Paper");
+        CallPaper();
     }
 
     @FXML
     private void handleScissor(ActionEvent actionEvent) {
         doMove("Scissor");
+        CallScissor();
     }
 
     private String getNameFromUser(){
@@ -135,6 +153,27 @@ public class GameViewController implements Initializable {
                 " (" + result.getWinnerMove() + ") " +
                 statusText + result.getLoserPlayer().getPlayerName() +
                 " (" + result.getLoserMove() + ")!";
+    }
+    public void HandleExit(ActionEvent event) {
+    }
+
+    public void HandleHistory(ActionEvent event) {
+    }
+
+    public void CallRock(){
+        File file = new File("data/the_Rock-removebg-preview.png");
+        Image image = new Image(file.toURI().toString());
+        imgPlayer.setImage(image);
+    }
+    public void CallPaper(){
+        File file = new File("data/paper-removebg-preview.png");
+        Image image = new Image(file.toURI().toString());
+        imgPlayer.setImage(image);
+    }
+    public void CallScissor(){
+        File file = new File("data/gZiXk0l-removebg-preview.png");
+        Image image = new Image(file.toURI().toString());
+        imgPlayer.setImage(image);
     }
 
 
