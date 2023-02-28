@@ -44,4 +44,10 @@ public class GameViewController implements Initializable {
 
     public void handleScissor(ActionEvent actionEvent) {
     }
+
+    public void HandleExit(ActionEvent event) {
+    }
+
+    public void HandleHistory(ActionEvent event) {
+    }
 }
