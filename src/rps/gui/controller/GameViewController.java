@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import rps.bll.game.GameManager;
 import rps.bll.game.Move;
@@ -30,6 +31,11 @@ import java.util.ResourceBundle;
  */
 public class GameViewController implements Initializable {
 
+    public Label lblRound;
+    @FXML
+    private Label lblAnnounce;
+    @FXML
+    private BorderPane borderPane;
     @FXML
     private Button btnClose;
     @FXML
@@ -80,6 +86,7 @@ public class GameViewController implements Initializable {
         ge = new GameManager(human, bot);
 
         setNames(bot.getPlayerName(), human.getPlayerName().toString());
+        dragScreen();
     }
 
     private void setNames(String botName, String humanName){
@@ -150,13 +157,21 @@ public class GameViewController implements Initializable {
 
     private void addPoints(Result result){
         if (result.getType() == ResultType.Win){
-            if (result.getWinnerPlayer().getPlayerType() == PlayerType.AI)
-                aICounter.setText((Integer.parseInt(aICounter.getText())+1) + "");
-            else
-                playerCounter.setText((Integer.parseInt(playerCounter.getText())+1) + "");
+            if (result.getWinnerPlayer().getPlayerType() == PlayerType.AI) {
+                aICounter.setText((Integer.parseInt(aICounter.getText()) + 1) + "");
+                lblAnnounce.setText(bot.getPlayerName() + " WINS!");
+            }
+
+            else {
+                playerCounter.setText((Integer.parseInt(playerCounter.getText()) + 1) + "");
+                lblAnnounce.setText(human.getPlayerName() + " WINS!");
+            }
         }
-        else
-            tieCounter.setText((Integer.parseInt(tieCounter.getText())+1) + "");
+        else {
+            tieCounter.setText((Integer.parseInt(tieCounter.getText()) + 1) + "");
+            lblAnnounce.setText("TIE!");
+        }
+        lblRound.setText(result.getRoundNumber()+"");
     }
 
     private void changeImg(String playerType, String move){
@@ -187,7 +202,7 @@ public class GameViewController implements Initializable {
     }
 
     private void callRock(String playerType){
-        File file = new File("data/the_Rock-removebg-preview.png");
+        File file = new File("data/The_Rock_Icon.png");
         Image image = new Image(file.toURI().toString());
         if (playerType.equals("Human"))
             imgPlayer.setImage(image);
@@ -211,7 +226,7 @@ public class GameViewController implements Initializable {
             imgBot.setImage(image);
     }
     private void buttonImage(){
-        File fileR = new File("data/the_Rock-removebg-preview.png");
+        File fileR = new File("data/The_Rock_Icon.png");
         Image imageR = new Image(fileR.toURI().toString());
         imgRock.setImage(imageR);
 
@@ -222,5 +237,14 @@ public class GameViewController implements Initializable {
         File fileS = new File("data/gZiXk0l-removebg-preview.png");
         Image imageS = new Image(fileS.toURI().toString());
         imgScissor.setImage(imageS);
+    }
+
+    private void dragScreen(){
+        borderPane.setOnMousePressed(pressEvent -> {
+            borderPane.setOnMouseDragged(dragEvent -> {
+                borderPane.getScene().getWindow().setX(dragEvent.getScreenX() - pressEvent.getSceneX());
+                borderPane.getScene().getWindow().setY(dragEvent.getScreenY() - pressEvent.getSceneY());
+            });
+        });
     }
 }
