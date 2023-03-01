@@ -4,6 +4,7 @@ package rps.bll.player;
 import rps.bll.game.IGameState;
 import rps.bll.game.Move;
 import rps.bll.game.Result;
+import rps.bll.game.ResultType;
 
 //Java imports
 import java.lang.reflect.Type;
@@ -23,6 +24,10 @@ public class Player implements IPlayer {
     private double rock;
     private double paper;
     private double scissor;
+    private double p;
+    private double r;
+    private double s;
+
     private ArrayList<Double> chance = new ArrayList();
 
     /**
@@ -67,25 +72,34 @@ public class Player implements IPlayer {
             }
             checkOldPlayerMoves(state);
             getChancesForMove(state);
-           return getRandomMove();
+           return getBotMove();
         }
     }
     private void checkOldPlayerMoves(IGameState state)
     {
         //Historic data to analyze and decide next move...
         ArrayList<Result> results = (ArrayList<Result>) state.getHistoricResults();
-        for (Result r: results)
-        {
-            if(r.getWinnerPlayer().getPlayerType().equals(PlayerType.Human) && !r.getWinnerPlayer().getPlayerType().equals(PlayerType.AI))
+        rock = 0;
+        paper = 0;
+        scissor = 0;
+        for (Result r: results) {
+            if(r.getType().equals(ResultType.Win))
+                if (r.getWinnerPlayer().getPlayerType().equals(PlayerType.Human)) {
+                    if (r.getWinnerMove().equals(Move.Rock) && !r.getLoserMove().equals(r.getWinnerMove())) {
+                        rock++;
+                    } else if (r.getWinnerMove().equals(Move.Paper) && !r.getLoserMove().equals(r.getWinnerMove())) {
+                        paper++;
+                    } else if (r.getWinnerMove().equals(Move.Scissor) && !r.getLoserMove().equals(r.getWinnerMove())) {
+                        scissor++;
+                    }
+                }
+            if(r.getWinnerPlayer().getPlayerType().equals(PlayerType.AI))
             {
-                if(r.getWinnerMove().equals(Move.Rock) && !r.getLoserMove().equals(r.getWinnerMove()))
-                {
+                if (r.getLoserMove().equals(Move.Rock) && !r.getLoserMove().equals(r.getWinnerMove())) {
                     rock++;
-                } else if (r.getWinnerMove().equals(Move.Paper) && !r.getLoserMove().equals(r.getWinnerMove()))
-                {
+                } else if (r.getLoserMove().equals(Move.Paper) && !r.getLoserMove().equals(r.getWinnerMove())) {
                     paper++;
-                } else if (r.getWinnerMove().equals(Move.Scissor) && !r.getLoserMove().equals(r.getWinnerMove()))
-                {
+                } else if (r.getLoserMove().equals(Move.Scissor) && !r.getLoserMove().equals(r.getWinnerMove())) {
                     scissor++;
                 }
             }
@@ -96,17 +110,29 @@ public class Player implements IPlayer {
     {
         //Historic data to analyze and decide next move...
         ArrayList<Result> results = (ArrayList<Result>) state.getHistoricResults();
-        double p = (double) ((paper/results.size()*3)*100f);
-        double r = (double) ((rock/results.size()*3)*100f);
-        double s = (double) ((scissor/results.size()*3)*100f);
-        System.out.println(paper+"p =" + p);
-        System.out.println(rock+"r =" + r);
-        System.out.println(scissor+"s = "+ s);
-        System.out.println(p+r+s);
+        p = (double) ((paper/results.size())*100f);
+        r = (double) ((rock/results.size())*100f);
+        s = (double) ((scissor/results.size())*100f);
         chance.add(p);
         chance.add(r);
         chance.add(s);
-        System.out.println(chance);
+    }
+
+    private Move getBotMove()
+    {
+      double ran = RandomGenerator.getDefault().nextDouble(100);
+      if(ran <= chance.get(0))
+      {
+          return Move.Scissor;
+      }
+      else if(ran <= chance.get(0)+ chance.get(1))
+      {
+          return Move.Paper;
+      }
+      else
+      {
+          return Move.Rock;
+      }
     }
 
     private Move getRandomMove(){
