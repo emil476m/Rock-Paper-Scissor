@@ -9,6 +9,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import rps.bll.game.GameManager;
 import rps.bll.game.Move;
@@ -30,6 +31,8 @@ import java.util.ResourceBundle;
  */
 public class GameViewController implements Initializable {
 
+    @FXML
+    private BorderPane borderPane;
     @FXML
     private Button btnClose;
     @FXML
@@ -80,6 +83,7 @@ public class GameViewController implements Initializable {
         ge = new GameManager(human, bot);
 
         setNames(bot.getPlayerName(), human.getPlayerName().toString());
+        dragScreen();
     }
 
     private void setNames(String botName, String humanName){
@@ -222,5 +226,14 @@ public class GameViewController implements Initializable {
         File fileS = new File("data/gZiXk0l-removebg-preview.png");
         Image imageS = new Image(fileS.toURI().toString());
         imgScissor.setImage(imageS);
+    }
+
+    private void dragScreen(){
+        borderPane.setOnMousePressed(pressEvent -> {
+            borderPane.setOnMouseDragged(dragEvent -> {
+                borderPane.getScene().getWindow().setX(dragEvent.getScreenX() - pressEvent.getSceneX());
+                borderPane.getScene().getWindow().setY(dragEvent.getScreenY() - pressEvent.getSceneY());
+            });
+        });
     }
 }
