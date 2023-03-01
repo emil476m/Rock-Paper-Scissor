@@ -30,6 +30,9 @@ import java.util.ResourceBundle;
  */
 public class GameViewController implements Initializable {
 
+    public Label lblRound;
+    @FXML
+    private Label lblAnnounce;
     @FXML
     private Button btnClose;
     @FXML
