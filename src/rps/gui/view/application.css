@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
 
 .root {
-    -fx-background-color: red;
+    -fx-background-color: linear-gradient(to right, red , blue);
 }
 .button {
     -fx-background-color: transparent;
