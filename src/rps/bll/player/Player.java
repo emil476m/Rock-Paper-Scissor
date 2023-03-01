@@ -109,20 +109,15 @@ public class Player implements IPlayer {
         System.out.println(chance);
     }
 
-    private Move getRandomMove()
-    {
-        int ran = RandomGenerator.getDefault().nextInt(3);
-        if(ran == 0)
-        {
+    private Move getRandomMove(){
+        int randomNumber = RandomGenerator.getDefault().nextInt(3);
+
+        if (randomNumber == 0)
             return Move.Rock;
-        }
-        else if (ran == 1)
-        {
+        else if (randomNumber == 1)
             return Move.Paper;
-        }
-        else
-        {
+        else if (randomNumber == 2)
             return Move.Scissor;
-        }
+        return null;
     }
 }
