@@ -64,7 +64,8 @@ public class ConsoleApp {
                 "Marvin the Paranoid Android",
                 "Bishop",
                 "Robot B-9",
-                "HAL"
+                "HAL",
+                "SkyNet"
         };
         int randomNumber = new Random().nextInt(botNames.length - 1);
         return botNames[randomNumber];
