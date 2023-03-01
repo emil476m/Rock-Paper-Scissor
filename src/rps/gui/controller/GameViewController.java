@@ -20,12 +20,9 @@ import rps.bll.player.PlayerType;
 
 import java.io.File;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Optional;
-import java.util.Random;
 import java.util.ResourceBundle;
-import java.util.Scanner;
-
-import static rps.bll.game.Move.Rock;
 
 /**
  *
@@ -125,37 +122,22 @@ public class GameViewController implements Initializable {
         changeImg("Human", playerMove);
         ge.playRound(Move.valueOf(playerMove));
 
-
-
-
-        ge.getGameState().getHistoricResults().forEach((result) -> {
-            System.out.println(getResultAsString(result));
+        ArrayList<Result> results = (ArrayList<Result>) ge.getGameState().getHistoricResults();
+        Result result = results.get(results.size()-1);
             changeImg("Bot", getBotMove(result));
-        });
-
+            addPoints(result);
 
     }
 
     public String getBotMove(Result result){
-        if (result.getLoserPlayer().getPlayerName().equals(bot.getPlayerName())) {
-            return result.getLoserMove().name();
+        if (result.getLoserPlayer().getPlayerType() == PlayerType.AI) {
+            return result.getLoserMove().toString();
         }
-        else if (result.getWinnerPlayer().getPlayerName().equals(bot.getPlayerName())) {
+        else {
             return result.getWinnerMove().name();
         }
-
-        return null;
     }
 
-    private String getResultAsString(Result result) {
-        String statusText = result.getType() == ResultType.Win ? "wins over " : "ties ";
-
-        return "Round #" + result.getRoundNumber() + ":" +
-                result.getWinnerPlayer().getPlayerName() +
-                " (" + result.getWinnerMove() + ") " +
-                statusText + result.getLoserPlayer().getPlayerName() +
-                " (" + result.getLoserMove() + ")!";
-    }
     public void handleExit(ActionEvent event) {
         Stage stage = (Stage) btnClose.getScene().getWindow();
         stage.close();
@@ -163,6 +145,17 @@ public class GameViewController implements Initializable {
 
     public void HandleHistory(ActionEvent event) {
 
+    }
+
+    private void addPoints(Result result){
+        if (result.getType() == ResultType.Win){
+            if (result.getWinnerPlayer().getPlayerType() == PlayerType.AI)
+                aICounter.setText((Integer.parseInt(aICounter.getText())+1) + "");
+            else
+                playerCounter.setText((Integer.parseInt(playerCounter.getText())+1) + "");
+        }
+        else
+            tieCounter.setText((Integer.parseInt(tieCounter.getText())+1) + "");
     }
 
     private void changeImg(String playerType, String move){
