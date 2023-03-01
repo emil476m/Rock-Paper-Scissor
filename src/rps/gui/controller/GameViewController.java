@@ -70,6 +70,7 @@ public class GameViewController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        buttonImage();
         playerName = getNameFromUser();
 
 
@@ -209,6 +210,17 @@ public class GameViewController implements Initializable {
         if (playerType.equals("Bot"))
             imgBot.setImage(image);
     }
+    private void buttonImage(){
+        File fileR = new File("data/the_Rock-removebg-preview.png");
+        Image imageR = new Image(fileR.toURI().toString());
+        imgRock.setImage(imageR);
 
+        File fileP = new File("data/paper-removebg-preview.png");
+        Image imageP = new Image(fileP.toURI().toString());
+        imgPaper.setImage(imageP);
 
+        File fileS = new File("data/gZiXk0l-removebg-preview.png");
+        Image imageS = new Image(fileS.toURI().toString());
+        imgScissor.setImage(imageS);
+    }
 }
