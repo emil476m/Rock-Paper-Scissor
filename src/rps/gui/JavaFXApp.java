@@ -29,7 +29,7 @@ public class JavaFXApp extends Application {
 
 
         stage.initStyle(StageStyle.UNDECORATED);
-        stage.getIcons().add(new Image("the_Rock-removebg-preview.png"));
+        stage.getIcons().add(new Image("the_Rock_Icon.png"));
 
         stage.setTitle("Welcome to the not-implemented Rock-Paper-Scissor game!");
         stage.setScene(new Scene(root));
