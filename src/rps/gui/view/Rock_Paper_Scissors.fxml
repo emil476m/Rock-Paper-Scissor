@@ -16,7 +16,7 @@
                      <graphic>
                         <ImageView fx:id="imgRock" fitHeight="150.0" fitWidth="200.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../../Data/The_Rock_Icon.png" />
+                              <Image url="@../../../../Data/The_Rock_icon.png" />
                            </image>
                         </ImageView>
                      </graphic></Button>
