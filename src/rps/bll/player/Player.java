@@ -27,6 +27,7 @@ public class Player implements IPlayer {
     private double p;
     private double r;
     private double s;
+    private int tie;
 
     private ArrayList<Double> chance = new ArrayList();
 
@@ -82,6 +83,7 @@ public class Player implements IPlayer {
         rock = 0;
         paper = 0;
         scissor = 0;
+        tie = 0;
         for (Result r: results) {
             if(r.getType().equals(ResultType.Win))
                 if (r.getWinnerPlayer().getPlayerType().equals(PlayerType.Human)) {
@@ -103,6 +105,8 @@ public class Player implements IPlayer {
                     scissor++;
                 }
             }
+            if(r.getType().equals(ResultType.Tie))
+            {tie++;}
         }
     }
 
@@ -110,9 +114,9 @@ public class Player implements IPlayer {
     {
         //Historic data to analyze and decide next move...
         ArrayList<Result> results = (ArrayList<Result>) state.getHistoricResults();
-        p = (double) ((paper/results.size())*100f);
-        r = (double) ((rock/results.size())*100f);
-        s = (double) ((scissor/results.size())*100f);
+        p = (double) ((paper/(results.size()-tie))*100f);
+        r = (double) ((rock/(results.size()-tie))*100f);
+        s = (double) ((scissor/(results.size()-tie))*100f);
         chance.add(p);
         chance.add(r);
         chance.add(s);
